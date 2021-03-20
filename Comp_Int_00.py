@@ -23,7 +23,7 @@ st.sidebar.header('User Input Values')
 
 def user_input_features():
 
-    Int_Rate = st.sidebar.slider('Interest Rate in %',4.0, 5.0, 6.0, 42.0, 10.0)
+    Int_Rate = st.sidebar.slider('Interest Rate in %',4.0, 5.0, 6.0, 7.0, 8.0, 9.0,10.0)
 
     	##st.sidebar.add_rows
 
