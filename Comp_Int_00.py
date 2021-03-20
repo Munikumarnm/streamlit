@@ -6,7 +6,7 @@ import pandas as pd
 
 # from sklearn.ensemble import RandomForestClassifier
 
-Year_List=[2,3,4,5,6,7,8,9,10]
+Year_List=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
 
 st.write("""
@@ -23,7 +23,7 @@ st.sidebar.header('User Input Values')
 
 def user_input_features():
 
-    Int_Rate = st.sidebar.slider('Interest Rate in %', 6.0, 42.0, 10.0)
+    Int_Rate = st.sidebar.slider('Interest Rate in %',4.0, 5.0, 6.0, 42.0, 10.0)
 
     	##st.sidebar.add_rows
 
