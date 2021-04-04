@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from scipy.stats import norm
-from pmdarima.arima import auto_arima
 
 st.write("""
 
