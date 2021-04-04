@@ -1,36 +1,32 @@
 import streamlit as st
-
 import pandas as pd
 import numpy as np
 from scipy.stats import norm
+from pmdarima.arima import auto_arima
 
-# from sklearn import datasets
-
-# from sklearn.ensemble import RandomForestClassifier
 st.write("""
 
-# Safety Stock & Replenishment Level Calculator per SKU!
+# Safety Stock & Reorder Level Calculator!
     
 """)
 
-st.sidebar.header('Enter Monthly Demand History, Procurement Lead Time & Desired Service Level')
+st.sidebar.header('Enter Last 6 Months Sales History, Procurement Lead Time & Desired Service Level')
 Month1 = st.sidebar.number_input('Month1')
 Month2 = st.sidebar.number_input('Month2')
 Month3 = st.sidebar.number_input('Month3')
-Month4= st.sidebar.number_input('Month4')
-Month5= st.sidebar.number_input('Month5')
-Month6=st.sidebar.number_input('Month6')
-LeadTime=st.sidebar.number_input('Lead Time in Months')
-ServiceLevel= st.sidebar.slider('Service Level',0.90,0.95,0.99)
+Month4 = st.sidebar.number_input('Month4')
+Month5 = st.sidebar.number_input('Month5')
+Month6 = st.sidebar.number_input('Month6')
+LeadTime = st.sidebar.number_input('Lead Time in Months')
+ServiceLevel = st.sidebar.slider('Service Level', 0.90, 0.95, 0.99)
 
 demand = pd.DataFrame({'Month':[1,2,3,4,5,6], 'Demand': [Month1,Month2,Month3,Month4,Month5,Month6]})
 
 LT= pd.DataFrame({'LeadTime':[LeadTime]})
 SL= ServiceLevel
-
-st.subheader('Input data for Demand History, Procurement LeadTime & Desired Service level')
+st.subheader('Input Data')
 st.write('Demand', demand)
-st.write('Lead Time', LeadTime)
+st.write('Lead Time in Months', LeadTime)
 st.write('Service Level', SL)
 
 forecast_demand = (Month1+Month2+Month3+Month4+Month5+Month6)/6
