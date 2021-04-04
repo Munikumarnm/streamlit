@@ -1,2 +1,4 @@
 sklearn==0.0
 streamlit==0.79.0
+pandas=0.0
+scipy=0.0
