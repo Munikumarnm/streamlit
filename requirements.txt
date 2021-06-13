@@ -1,5 +1,6 @@
 sklearn==0.0
 streamlit==0.79.0
 auto-ts==0.0.36	
-python -m pip install "dask[dataframe]" --upgrade pip
+conda install dask
+python -m pip install
 
