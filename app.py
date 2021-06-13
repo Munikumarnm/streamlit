@@ -1,41 +1,88 @@
+# import the packages
 import streamlit as st
 import pandas as pd
 import numpy as np
 from scipy.stats import norm
+from auto_ts import auto_timeseries
 
-st.write("""
 
-# Safety Stock & Reorder Level Calculator!
-    
-""")
+# set the web page configuration
+st.set_page_config(page_title="Inventory Engine",
+                   initial_sidebar_state="collapsed",
+                   page_icon="😎")
 
-st.sidebar.header('Enter Last 6 Months Sales History, Procurement Lead Time & Desired Service Level')
-Month1 = st.sidebar.number_input('Month1')
-Month2 = st.sidebar.number_input('Month2')
-Month3 = st.sidebar.number_input('Month3')
-Month4 = st.sidebar.number_input('Month4')
-Month5 = st.sidebar.number_input('Month5')
-Month6 = st.sidebar.number_input('Month6')
-LeadTime = st.sidebar.number_input('Lead Time in Months')
-ServiceLevel = st.sidebar.slider('Service Level', 0.90, 0.95, 0.99)
+# Define the title of the application & the markdown
+st.title('Safety Stock & Re-order Level Calculator! ⚙️')
+st.write('Generates accurate safety stock, reorder level in few simple steps!!')
 
-demand = pd.DataFrame({'Month':[1,2,3,4,5,6], 'Demand': [Month1,Month2,Month3,Month4,Month5,Month6]})
+# Define the tabs of the application
+tabs = ["Application", "About"]
+page = st.sidebar.radio("Pages 🧾", tabs)
 
-LT= pd.DataFrame({'LeadTime':[LeadTime]})
-SL= ServiceLevel
-st.subheader('Input Data')
-st.write('Demand', demand)
-st.write('Lead Time in Months', LeadTime)
-st.write('Service Level', SL)
+# write the content for the page Application
+if page == "Application":
+    st.header('Upload Input Data 🔧 ')
+    st.write('By default sample data is loaded. For your calculations please input new data.')
+    st.subheader("1. Input demand history for minimum 12 periods.")
+# write the collapse information
+    with st.beta_expander("Input format"):
+        st.write("Input should be a dataframe/table with two columns: Period and Demand. "
+                 "Period can be in Day|Week|Month|Year "
+                 "ideally in the format YYYY-MM-DD. "
+                 "Demand column must be numeric.")
+        demand_format = pd.DataFrame({'Period': ['2021-01-01','2021-02-01','2021-03-01','2021-04-01','2021-05-01','2021-06-01','2021-07-01','2021-08-01'], 'Demand': [10, 12, 13, 11, 12, 9,10,13]})
+        st.write(demand_format)
 
-forecast_demand = (Month1+Month2+Month3+Month4+Month5+Month6)/6
-Lead_Time_Demand = forecast_demand*LeadTime
-Standard_Deviation = demand['Demand'].std()
-Service_Factor = norm.ppf(SL)
-Lead_Time_Factor =np.sqrt(LeadTime)
-Safety_Stock = Standard_Deviation*Service_Factor*Lead_Time_Factor
-Reorder_Point = Safety_Stock+Lead_Time_Demand
+    uploaded_file = st.file_uploader('')
+    if uploaded_file is None:
+        st.write("upload csv file")
+    try:
+        demand= pd.read_csv(uploaded_file)
+    except:
+        demand=demand_format
+    demand= pd.DataFrame(demand)
+    demand.columns= ['Period','Demand']
+    st.subheader('2. Enter Supplier Lead Time 🔧 ')
+    LeadTime = st.number_input('Caution:Demand & Lead time should be in same time frame. Example,If you have choosen weekly demand then the lead time should be in weeks.',1)
+    st.subheader('3. Select Desired Service Level 🔧 ')
+    ServiceLevel = st.slider('Service level is the probability fulfilling the expected demand with on hand inventory during the lead time', 0.90, 0.95, 0.99)
+    LT= pd.DataFrame({'LeadTime':[LeadTime]})
+    SL= ServiceLevel
+# Subheader
+    st.header('Recap Input Data')
+    col1,col2, col3= st.beta_columns(3)
+    col1.subheader("Demand Input")
+    col1.write(demand)
+    col2.subheader("Supplier Lead Time")
+    col2.write(LT)
+    col3.subheader("Service Level")
+    col3.write(SL)
+#Subheader
+   # st.subheader("Generating Forecast")
+    demand['Period']= pd.to_datetime(demand['Period'])
+    model = auto_timeseries(forecast_period=1)
+    model_fit = model.fit(demand, ts_column='Period', target='Demand')
+    model.get_leaderboard()
+    forecast_demand= model.predict(testdata=1,simple=True)
 
-st.subheader('Calculated Safety Stock & Reorder Point')
-st.write('Safety Stock is', round(Safety_Stock,2))
-st.write('Reorder Point is', round(Reorder_Point,2))
+    #st.line_chart(forecast_demand,use_container_width=False,width=800)
+    Lead_Time_Demand = forecast_demand*LeadTime
+    Standard_Deviation = demand['Demand'].std()
+    Service_Factor = norm.ppf(SL)
+    Lead_Time_Factor =np.sqrt(LeadTime)
+    Safety_Stock =  Standard_Deviation*Service_Factor*Lead_Time_Factor
+    Reorder_Point = Safety_Stock+Lead_Time_Demand
+
+    st.header('We Are Done, Got The Result!')
+    st.write('Safety Stock is', round(Safety_Stock,2))
+    st.write('Reorder Point is', round(Reorder_Point,2))
+
+if page == "About":
+    st.image("Inv1.jpg")
+    st.header("About")
+    st.markdown("Official documentation of **[Streamlit](https://docs.streamlit.io/en/stable/getting_started.html)**")
+    st.write("Author:")
+    st.markdown(""" **[Munikumar N.M](https://www.linkedin.com/in/munikumarnm/)**""")
+    st.markdown("""**[Source code](https://github.com/Munikumarnm/streamlit)**""")
+    st.write("Created on 20/03/2021")
+    st.write("Last updated: **13/06/2021**")
