@@ -64,6 +64,7 @@ if page == "Application":
     model_fit = model.fit(demand, ts_column='Period', target='Demand')
     model.get_leaderboard()
     forecast_demand= model.predict(testdata=1,simple=True)
+    st.write(forecast_demand)
 
     #st.line_chart(forecast_demand,use_container_width=False,width=800)
     Lead_Time_Demand = forecast_demand*LeadTime
