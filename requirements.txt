@@ -11,3 +11,4 @@ pandas==1.2.4
 numpy==1.19.5
 xlrd==2.0.1
 scipy==1.6.3
+auto-ts==0.0.36
