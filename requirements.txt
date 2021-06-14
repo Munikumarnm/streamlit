@@ -1,6 +1,4 @@
 scikit-learn==0.24.2
-scipy==1.6.3
-sklearn==0.0
 statsmodels==0.12.2
 streamlit==0.79.0
 auto-ts==0.0.36	
