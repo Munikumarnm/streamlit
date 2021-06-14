@@ -1,3 +1,5 @@
+dask==2021.6.0
+dask-core==2021.6.0
 auto-ts==	0.0.36	
 altair==4.1.0
 argon2-cffi==20.1.0
