@@ -4,13 +4,12 @@ import pandas as pd
 import numpy as np
 from scipy.stats import norm
 from auto_ts import auto_timeseries
-
+import xlrd
 
 # set the web page configuration
 st.set_page_config(page_title="Inventory Engine",
                    initial_sidebar_state="collapsed",
                    page_icon="😎")
-
 # Define the title of the application & the markdown
 st.title('Safety Stock & Re-order Level Calculator! ⚙️')
 st.write('Generates accurate safety stock, reorder level in few simple steps!!')
@@ -58,23 +57,21 @@ if page == "Application":
     col3.subheader("Service Level")
     col3.write(SL)
 #Subheader
-   # st.subheader("Generating Forecast")
     demand['Period']= pd.to_datetime(demand['Period'])
-    model = auto_timeseries(forecast_period=1)
+    forecast_horizon=1
+    model = auto_timeseries(forecast_period=forecast_horizon)
     model_fit = model.fit(demand, ts_column='Period', target='Demand')
-    model.get_leaderboard()
-    forecast_demand= model.predict(testdata=1,simple=True)
-    st.write(forecast_demand)
-
-    #st.line_chart(forecast_demand,use_container_width=False,width=800)
+    best_model=model.get_leaderboard()
+    forecast_demand= np.average(model.predict(testdata=1,model='best',simple=True))
     Lead_Time_Demand = forecast_demand*LeadTime
     Standard_Deviation = demand['Demand'].std()
     Service_Factor = norm.ppf(SL)
     Lead_Time_Factor =np.sqrt(LeadTime)
     Safety_Stock =  Standard_Deviation*Service_Factor*Lead_Time_Factor
     Reorder_Point = Safety_Stock+Lead_Time_Demand
-
-    st.header('We Are Done, Got The Result!')
+    st.header('Forecast Generated Using AutoML')
+    st.write("Forecasting model used", best_model[0:1])
+    st.header('We Are Done, Check The Result!')
     st.write('Safety Stock is', round(Safety_Stock,2))
     st.write('Reorder Point is', round(Reorder_Point,2))
 
