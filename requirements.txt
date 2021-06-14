@@ -1,14 +1,8 @@
 pip==21.1.2
 wheel==0.36.2
 brotli==1.0.9
-openssl==1.1.1k
-cryptography==3.4.7
-tornado==6.1
-setuptools==52.0.0
-cython==0.29.23
 streamlit==0.82.0
 pandas==1.2.4
 numpy==1.19.5
-xlrd==2.0.1
 scipy==1.6.3
 auto-ts==0.0.36
