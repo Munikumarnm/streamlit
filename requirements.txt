@@ -19,7 +19,7 @@ jupyter==1.0.0
 jupyter-console==6.4.0
 locket==0.2.1
 LunarCalendar==0.0.9
-numpy==1.19.5k
+numpy==1.19.5
 pandocfilters==1.4.2
 partd==1.2.0
 patsy==0.5.1
