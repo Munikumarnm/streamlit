@@ -1,6 +1,2 @@
-pip==21.1.2
-wheel==0.36.2
-brotli==1.0.9
 streamlit==0.82.0
-numpy==1.19.5
 auto-ts==0.0.36
