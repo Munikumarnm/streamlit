@@ -31,7 +31,6 @@ PyMeeus==0.5.11
 pyparsing==2.4.7
 pystan==2.19.1.1
 python-dateutil==2.8.1
-pywin32==300
 PyYAML==5.4.1
 qtconsole==5.1.0
 QtPy==1.9.0
